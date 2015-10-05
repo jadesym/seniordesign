@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var android = require('./routes/android');
+var microcontroller = require('./routes/microcontroller');
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/android', android);
+app.use('/microcontroller', microcontroller)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
