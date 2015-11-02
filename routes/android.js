@@ -17,15 +17,16 @@ router.get('/sync-init', function(req, res, next) {
   console.log("New get request to initialize syncing");
   // Will now accept 100 get requests twice a second
   num_times = 0;
-  times_array = [];
+  sum_times = 0;    
   res.send('Syncing has been initialized!');
 });
 
 /* GET users listing. */
 router.get('/time/:androidTime', function(req, res, next) {
-  currentAndroidTime = req.params.androidTime;
   var time = process.hrtime();
+  currentAndroidTime = req.params.androidTime;
   var serverTimeInNanoseconds = time[0] * 1e9 + time[1];
+  console.log(serverTimeInNanoseconds);
   var current_offset = serverTimeInNanoseconds - currentAndroidTime;
   num_times += 1;
   sum_times += current_offset;
@@ -43,21 +44,21 @@ router.post('/xyz-data', function(req, res, next) {
   console.log(locationData);
   for (var key in locationData) {
 
-  	var timestamp = key;
+  	var timestamp = key + (sum_times / num_times.toString());
   	var xyzCoords = locationData[key];
   	var xCoord = xyzCoords[0];
   	var yCoord = xyzCoords[1];
   	var zCoord = xyzCoords[2];
   	var error = false;
-	var checkError = function(error) {
-		if (error) {
-			error = true;
-			console.log("Data Not Sent Successfully!")
-		} else {
-			console.log("Data Successfully Put In DB!")
-		}
-	};
-	var timestampRef = androidRef.child(timestamp);
+  	var checkError = function(error) {
+  		if (error) {
+  			error = true;
+  			console.log("Data Not Sent Successfully!")
+  		} else {
+  			console.log("Data Successfully Put In DB!")
+  		}
+  	};
+  	var timestampRef = androidRef.child(timestamp);
   	timestampRef.set({
 		"x" : xCoord,
 		"y" : yCoord,
