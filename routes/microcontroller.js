@@ -14,10 +14,14 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var locationData = req.body;
   console.log(locationData);
+  keyString = "";
+  valString = "";
   for (var key in locationData) {
 
   	var key = key;
+  	keyString += key.toString();
   	var val = locationData[key];
+  	valString += val.toString();
   	var error = false;
   	var checkError = function(error) {
   		if (error) {
@@ -31,9 +35,9 @@ router.post('/', function(req, res, next) {
   	keyRef.set(val, checkError);
   }
   if (error) {
-	res.send('Error: Data Not Put In Firebase' + key.toString() + ":" val.toString();
+	res.send('Error: Data Not Put In Firebase' + keyString + ":" + valString);
   } else {
-  	res.send("Success!" + key.toString() + ":" val.toString())
+  	res.send("Success!" + keyString + ":" + valString);
   }
 });
 
