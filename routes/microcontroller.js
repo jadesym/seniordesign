@@ -31,9 +31,9 @@ router.post('/', function(req, res, next) {
   	keyRef.set(val, checkError);
   }
   if (error) {
-	res.send('Error: Data Not Put In Firebase');
+	res.send('Error: Data Not Put In Firebase' + key.toString() + ":" val.toString();
   } else {
-  	res.send("Success!")
+  	res.send("Success!" + key.toString() + ":" val.toString())
   }
 });
 
