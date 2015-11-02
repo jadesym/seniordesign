@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Firebase = require("firebase");
 var ref = new Firebase("https://senior-design.firebaseio.com");
-var microcontrollerRef = ref.child("android");
+var microcontrollerRef = ref.child("microcontroller");
 
 
 /* GET home page. */
@@ -27,10 +27,8 @@ router.post('/', function(req, res, next) {
   			console.log("Data Successfully Put In DB!")
   		}
   	};
-  	var keyRef = microcontrollerRef.child(keyRef);
-  	keyRef.set({
-		key: val
-  	}, checkError);
+  	var keyRef = microcontrollerRef.child(key);
+  	keyRef.set(val, checkError);
   }
   if (error) {
 	res.send('Error: Data Not Put In Firebase');
