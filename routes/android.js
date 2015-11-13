@@ -41,13 +41,14 @@ function unixPureTime(timeOfRecording) {
 
 router.post('/', function(req, res, next) {
   var prelimData = req.body;
+  console.log(prelimData);
   var stepData = {};
 
   for (var key in prelimData) {
     stepData[parseInt(key.replace('"', ''))] = prelimData[key];
   }
 
-  // console.log(stepData);
+  console.log(stepData);
   var rightNow = new Date();
   // console.log(rightNow.getTime());
   var returnString = "";
