@@ -13,6 +13,14 @@ router.get('/', function(req, res, next) {
   res.render('microcontroller', { title: 'Microcontroller' });
 });
 
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+  return Math.min.apply(null, this);
+};
+
 function unixPureTime(timeOfRecording) {
   var hours = timeOfRecording.getHours();
   var minutes = timeOfRecording.getMinutes();
@@ -42,15 +50,18 @@ router.post('/', function(req, res, next) {
   var failures = 0;
   var successes = 0;
   var allKeys = Object.keys(voltageData);
+  var maxTimestamp = allKeys.max();
   var lastKey = allKeys[allKeys.length - 1];
   var totalAsyncCalls = [];
   allKeys.forEach(function(key, index) {
+    var diff = (maxTimestamp - parseInt(key)).toString();
+
     // console.log("Entering for loop" + allKeys.toString());
-    var voltageValue = voltageData[key];
+    var voltageValue = parseInt(voltageData[key]);
     // console.log(key + voltageValue);
     // var originalMoment = moment(currentSeconds);
     // console.log("Original Unix: " + rightNow.getTime());
-    var timeOfRecording = new Date(rightNow - key);
+    var timeOfRecording = new Date(rightNow - diff);
     // console.log("Original Unix: " + timeOfRecording.getTime());
     var currentDay = (timeOfRecording.getTime() - timeOfRecording.getHours() * 60 * 60 * 1000
       - timeOfRecording.getMinutes() * 60 * 1000 - timeOfRecording.getSeconds() * 1000 

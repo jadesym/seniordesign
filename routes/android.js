@@ -12,6 +12,14 @@ Fireproof.bless(Q);
 var num_times = 0;
 var sum_times = 0;
 
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+  return Math.min.apply(null, this);
+};
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Android' });
@@ -32,7 +40,13 @@ function unixPureTime(timeOfRecording) {
 }
 
 router.post('/', function(req, res, next) {
-  var stepData = req.body;
+  var prelimData = req.body;
+  var stepData = {};
+
+  for (var key in prelimData) {
+    stepData[parseInt(key.replace('"', ''))] = prelimData[key];
+  }
+
   // console.log(stepData);
   var rightNow = new Date();
   // console.log(rightNow.getTime());
@@ -40,15 +54,17 @@ router.post('/', function(req, res, next) {
   var failures = 0;
   var successes = 0;
   var allKeys = Object.keys(stepData);
+  var maxTimestamp = allKeys.max();
   var lastKey = allKeys[allKeys.length - 1];
   var totalAsyncCalls = [];
   allKeys.forEach(function(key, index) {
+    var diff = (maxTimestamp - parseInt(key)).toString();
     // console.log("Entering for loop" + allKeys.toString());
     var stepValue = parseInt(stepData[key]);
     // console.log(parseInt(key) + stepValue);
     // var originalMoment = moment(currentSeconds);
     // console.log("Original Unix: " + rightNow.getTime());
-    var timeOfRecording = new Date(rightNow - parseInt(key.replace('"', '')));
+    var timeOfRecording = new Date(rightNow - diff);
     // console.log("Original Unix: " + timeOfRecording.getTime());
     var currentDay = (timeOfRecording.getTime() - timeOfRecording.getHours() * 60 * 60 * 1000
       - timeOfRecording.getMinutes() * 60 * 1000 - timeOfRecording.getSeconds() * 1000 
