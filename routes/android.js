@@ -48,7 +48,7 @@ router.post('/', function(req, res, next) {
     // console.log(parseInt(key) + stepValue);
     // var originalMoment = moment(currentSeconds);
     // console.log("Original Unix: " + rightNow.getTime());
-    var timeOfRecording = new Date(rightNow - parseInt(key));
+    var timeOfRecording = new Date(rightNow - parseInt(key.replace('"', '')));
     // console.log("Original Unix: " + timeOfRecording.getTime());
     var currentDay = (timeOfRecording.getTime() - timeOfRecording.getHours() * 60 * 60 * 1000
       - timeOfRecording.getMinutes() * 60 * 1000 - timeOfRecording.getSeconds() * 1000 
