@@ -44,11 +44,11 @@ router.post('/', function(req, res, next) {
   var totalAsyncCalls = [];
   allKeys.forEach(function(key, index) {
     // console.log("Entering for loop" + allKeys.toString());
-    var stepValue = stepData[key];
-    // console.log(key + stepValue);
+    var stepValue = parseInt(stepData[key]);
+    // console.log(parseInt(key) + stepValue);
     // var originalMoment = moment(currentSeconds);
     // console.log("Original Unix: " + rightNow.getTime());
-    var timeOfRecording = new Date(rightNow - key);
+    var timeOfRecording = new Date(rightNow - parseInt(key));
     // console.log("Original Unix: " + timeOfRecording.getTime());
     var currentDay = (timeOfRecording.getTime() - timeOfRecording.getHours() * 60 * 60 * 1000
       - timeOfRecording.getMinutes() * 60 * 1000 - timeOfRecording.getSeconds() * 1000 
