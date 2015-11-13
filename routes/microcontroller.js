@@ -4,7 +4,6 @@ var Fireproof = require('fireproof'),
   Firebase = require('firebase');
 var ref = new Firebase("https://senior-design.firebaseio.com");
 var microcontrollerRef = ref.child("microcontroller");
-// var moment = require('moment');
 var Q = require('q');
 
 Fireproof.bless(Q);
@@ -16,12 +15,11 @@ router.get('/', function(req, res, next) {
 
 function unixPureTime(timeOfRecording) {
   var hours = timeOfRecording.getHours();
-
   var minutes = timeOfRecording.getMinutes();
   var seconds = timeOfRecording.getSeconds();
   var milliseconds = timeOfRecording.getMilliseconds();
   var resultUnix = hours;
-  console.log(hours + ":" + minutes + ":" + seconds + ":" + milliseconds);
+  // console.log(hours + ":" + minutes + ":" + seconds + ":" + milliseconds);
   resultUnix = resultUnix * 60 + minutes;
   resultUnix = resultUnix * 60 + seconds;
   resultUnix = resultUnix * 1000 + milliseconds;
@@ -31,7 +29,7 @@ function unixPureTime(timeOfRecording) {
 /* GET users listing. */
 router.post('/', function(req, res, next) {
   var rightNow = new Date();
-  console.log(rightNow.getTime());
+  // console.log(rightNow.getTime());
   // var currentSeconds = rightNow.getTime() / 1000;
   // var momentNow = moment(currentSeconds);
   // console.log(currentSeconds);
@@ -39,7 +37,7 @@ router.post('/', function(req, res, next) {
   // console.log(momentNow.second());
 
   var voltageData = req.body;
-  console.log(voltageData);
+  // console.log(voltageData);
   var returnString = "";
   var failures = 0;
   var successes = 0;
@@ -51,9 +49,9 @@ router.post('/', function(req, res, next) {
     var voltageValue = voltageData[key];
     // console.log(key + voltageValue);
     // var originalMoment = moment(currentSeconds);
-    console.log("Original Unix: " + rightNow.getTime());
+    // console.log("Original Unix: " + rightNow.getTime());
     var timeOfRecording = new Date(rightNow - key);
-    console.log("Original Unix: " + timeOfRecording.getTime());
+    // console.log("Original Unix: " + timeOfRecording.getTime());
     var currentDay = (timeOfRecording.getTime() - timeOfRecording.getHours() * 60 * 60 * 1000
       - timeOfRecording.getMinutes() * 60 * 1000 - timeOfRecording.getSeconds() * 1000 
       - timeOfRecording.getMilliseconds()) / 1000;
@@ -83,7 +81,7 @@ router.post('/', function(req, res, next) {
       )
     );
   });
-  console.log("Number of Async Calls: " + totalAsyncCalls.length);
+  // console.log("Number of Async Calls: " + totalAsyncCalls.length);
   Q.allSettled(totalAsyncCalls).then(function(results) {
     res.send("Successes: " + successes.toString() + " Failures: " + failures.toString() + "\n" + returnString);
   });

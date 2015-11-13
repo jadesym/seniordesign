@@ -1,8 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var Firebase = require("firebase");
+var Fireproof = require('fireproof'),
+  Firebase = require('firebase');
 var ref = new Firebase("https://senior-design.firebaseio.com");
 var androidRef = ref.child("android");
+// var moment = require('moment');
+var Q = require('q');
+
+Fireproof.bless(Q);
 
 var num_times = 0;
 var sum_times = 0;
@@ -12,64 +17,72 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Android' });
 });
 
-/* GET users listing. */
-router.get('/sync-init', function(req, res, next) {
-  console.log("New get request to initialize syncing");
-  // Will now accept 100 get requests twice a second
-  num_times = 0;
-  sum_times = 0;    
-  res.send('Syncing has been initialized!');
-});
+function unixPureTime(timeOfRecording) {
+  var hours = timeOfRecording.getHours();
 
-/* GET users listing. */
-router.get('/time/:androidTime', function(req, res, next) {
-  var time = process.hrtime();
-  currentAndroidTime = req.params.androidTime;
-  var serverTimeInNanoseconds = time[0] * 1e9 + time[1];
-  console.log(serverTimeInNanoseconds);
-  var current_offset = serverTimeInNanoseconds - currentAndroidTime;
-  num_times += 1;
-  sum_times += current_offset;
-  res.send("Successfully received " + num_times.toString() + " times: " 
-    + currentAndroidTime.toString());
-});
+  var minutes = timeOfRecording.getMinutes();
+  var seconds = timeOfRecording.getSeconds();
+  var milliseconds = timeOfRecording.getMilliseconds();
+  var resultUnix = hours;
+  // console.log(hours + ":" + minutes + ":" + seconds + ":" + milliseconds);
+  resultUnix = resultUnix * 60 + minutes;
+  resultUnix = resultUnix * 60 + seconds;
+  resultUnix = resultUnix * 1000 + milliseconds;
+  return resultUnix;
+}
 
-router.get('/get-offset', function(req, res, next) {
-  res.send("Average Offset Ping: " + (sum_times / num_times).toString())
-});
-
-/* GET users listing. */
-router.post('/xyz-data', function(req, res, next) {
-  var locationData = req.body;
-  console.log(locationData);
-  for (var key in locationData) {
-
-  	var timestamp = key + (sum_times / num_times.toString());
-  	var xyzCoords = locationData[key];
-  	var xCoord = xyzCoords[0];
-  	var yCoord = xyzCoords[1];
-  	var zCoord = xyzCoords[2];
-  	var error = false;
-  	var checkError = function(error) {
-  		if (error) {
-  			error = true;
-  			console.log("Data Not Sent Successfully!")
-  		} else {
-  			console.log("Data Successfully Put In DB!")
-  		}
-  	};
-  	var timestampRef = androidRef.child(timestamp);
-  	timestampRef.set({
-		"x" : xCoord,
-		"y" : yCoord,
-		"z" : zCoord 
-  	}, checkError);
-  }
-  if (error) {
-	res.send('Error: Data Not Put In Firebase');
-  } else {
-  	res.send("Success!")
-  }
+router.post('/', function(req, res, next) {
+  var stepData = req.body;
+  // console.log(stepData);
+  var rightNow = new Date();
+  // console.log(rightNow.getTime());
+  var returnString = "";
+  var failures = 0;
+  var successes = 0;
+  var allKeys = Object.keys(stepData);
+  var lastKey = allKeys[allKeys.length - 1];
+  var totalAsyncCalls = [];
+  allKeys.forEach(function(key, index) {
+    // console.log("Entering for loop" + allKeys.toString());
+    var stepValue = stepData[key];
+    // console.log(key + stepValue);
+    // var originalMoment = moment(currentSeconds);
+    // console.log("Original Unix: " + rightNow.getTime());
+    var timeOfRecording = new Date(rightNow - key);
+    // console.log("Original Unix: " + timeOfRecording.getTime());
+    var currentDay = (timeOfRecording.getTime() - timeOfRecording.getHours() * 60 * 60 * 1000
+      - timeOfRecording.getMinutes() * 60 * 1000 - timeOfRecording.getSeconds() * 1000 
+      - timeOfRecording.getMilliseconds()) / 1000;
+    var currentHour = timeOfRecording.getHours();
+    var checkError = function(error) {
+      if (error) {
+        var errorString = key + "-" + stepValue + ":Failed!\n";
+        // console.log(errorString);
+        returnString += errorString;
+        failures += 1;
+        // console.log("Error " + failures);
+      } else {
+        var successString = key + "-" + stepValue + ":Success!\n";
+        // console.log(successString);
+        returnString += successString;
+        successes += 1;
+        // console.log("Success " + successes);
+      }
+    }
+    var justTheTime = unixPureTime(timeOfRecording); 
+    var keyRef = androidRef.child(currentDay).child(currentHour).child(justTheTime),
+      fireproofKeyRef = new Fireproof(keyRef);
+    // console.log(failures +":" + successes);
+    totalAsyncCalls.push(
+      fireproofKeyRef.set(stepValue).then(
+        checkError
+      )
+    );
+  });
+  // console.log("Number of Async Calls: " + totalAsyncCalls.length);
+  Q.allSettled(totalAsyncCalls).then(function(results) {
+    res.send("Successes: " + successes.toString() + " Failures: " + failures.toString() + "\n" + returnString);
+  });
 });
 
 module.exports = router;
