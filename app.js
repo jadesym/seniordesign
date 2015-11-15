@@ -9,6 +9,14 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var android = require('./routes/android');
 var microcontroller = require('./routes/microcontroller');
+var blank = require('./routes/blank');
+var chart = require('./routes/chart');
+var error = require('./routes/error');
+var form = require('./routes/form');
+var tabpanel = require('./routes/tabpanel');
+var table = require('./routes/table');
+var ui = require('./routes/ui');
+
 
 var app = express();
 
@@ -28,6 +36,13 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/android', android);
 app.use('/microcontroller', microcontroller)
+app.use('/blank', blank)
+app.use('/chart', chart)
+app.use('/error', error)
+app.use('/form', form)
+app.use('/tabpanel', tabpanel)
+app.use('/table', table)
+app.use('/ui', ui)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
