@@ -3,27 +3,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portable Energy Generator | Data Collection System</title>
   <!-- BOOTSTRAP STYLES-->
-    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="<%= typeof relativePath!='undefined' ? relativePath : '' %>css/bootstrap.css" rel="stylesheet" />
      <!-- FONTAWESOME STYLES-->
-    <link href="css/font-awesome.css" rel="stylesheet" />
-     <!-- MORRIS CHART STYLES-->
-    <!-- <link href="js/morris/morris-0.4.3.min.css" rel="stylesheet" /> -->
+    <link href="<%= typeof relativePath!='undefined' ? relativePath : '' %>css/font-awesome.css" rel="stylesheet" />
+    <!-- MORRIS CHART STYLES-->
+     <link href="<%= typeof relativePath!='undefined' ? relativePath : '' %>js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+
         <!-- CUSTOM STYLES-->
-    <link href="css/custom.css" rel="stylesheet" />
+    <link href="<%= typeof relativePath!='undefined' ? relativePath : '' %>css/custom.css" rel="stylesheet" />
      <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
-    <!-- JQUERY SCRIPTS -->
-    <!-- <script src="js/jquery-1.10.2.js"></script> -->
       <!-- BOOTSTRAP SCRIPTS -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="<%= typeof relativePath!='undefined' ? relativePath : '' %>js/bootstrap.min.js"></script>
+    <!-- MORRIS CHART SCRIPTS -->
+    <script src="<%= typeof relativePath!='undefined' ? relativePath : '' %>js/morris/morris.js"></script>
+    <script src="<%= typeof relativePath!='undefined' ? relativePath : '' %>js/morris/raphael-2.1.0.min.js"></script>
+
     <!-- METISMENU SCRIPTS -->
-    <!-- <script src="js/jquery.metisMenu.js"></script> -->
-     <!-- MORRIS CHART SCRIPTS -->
-    <!-- <script src="js/morris/raphael-2.1.0.min.js"></script> -->
-    <!-- <script src="js/morris/morris.js"></script> -->
-      <!-- CUSTOM SCRIPTS -->
-    <!-- <script src="js/custom.js"></script>-->
+    <script src="<%= typeof relativePath!='undefined' ? relativePath : '' %>js/jquery.metisMenu.js"></script>
+    <script src="http://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="http://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="http://www.amcharts.com/lib/3/themes/dark.js"></script>
+    <!-- REACT.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+
+    <script src="https://cdn.firebase.com/libs/reactfire/0.5.1/reactfire.min.js"></script>
+
 
 </head>

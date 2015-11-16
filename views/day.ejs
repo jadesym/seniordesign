@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<% include head %>
+<body>
+    <div id="wrapper">
+        <% include topnav %>
+        <% include sidenav %>
+
+        <div id="page-wrapper" >
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2> <span id="data-date"></span> | Voltage & Step Data</h2>   
+                        <br>
+                    </div>
+                </div>  
+                <script type="text/javascript">
+                   $(document).ready(function() {
+                        // console.log("enters");
+                        var monthNames = [
+                          "January", "February", "March",
+                          "April", "May", "June", "July",
+                          "August", "September", "October",
+                          "November", "December"
+                        ];
+                        var date = new Date(<%- unixDay%> * 1000);
+                        var day = date.getDate();
+                        var monthIndex = date.getMonth();
+                        var year = date.getFullYear();
+
+                        // console.log(day, monthNames[monthIndex], year);
+                        $("#data-date").text(monthNames[monthIndex] + ' ' + day + ', ' + year);
+
+                    });
+               </script>
+                <script>
+                    var chartData = generateChartData();
+
+                    var chart = AmCharts.makeChart("chartdiv", {
+                        "type": "serial",
+                        "theme": "dark",
+                        "legend": {
+                            "useGraphSettings": true
+                        },
+                        "marginRight": 80,
+                        "dataProvider": chartData,
+                        "valueAxes": [{
+                            "id":"v1",
+                            "position": "left",
+                            "title": "Voltage (V)",
+                            "axisThickness": 2,
+                            "gridAlpha": 0,
+                            "axisAlpha": 1,
+                            "axisColor": "#FFA400"
+                        }, {
+                            "id":"v2",
+                            "position": "right",
+                            "title": "Steps",
+                            "axisThickness": 2,
+                            "gridAlpha": 0,
+                            "axisAlpha": 1,
+                            "axisColor": "#87BCDE",
+                        }],
+                        "graphs": [{
+                            "id": "v1",
+                            "lineColor": "#FFA400",
+                            "fillAlphas": 0.4,
+                            "title": "Voltage (V)",
+                            "valueField": "voltages",
+                            "balloonText": "<div style='margin:5px; font-size:19px;'>Voltage: <b>[[value]] V</b></div>"
+                        }, {
+                            "valueAxis": "v2",
+                            "lineColor": "#87BCDE",
+                            "fillAlphas": 0.4,
+                            "title": "Steps",
+                            "valueField": "steps",
+                            "balloonText": "<div style='margin:5px; font-size:19px;'>Steps: <b>[[value]]</b></div>"
+                        }],
+                        "chartScrollbar": {
+                            "graph": "v1",
+                            "scrollbarHeight": 80,
+                            "backgroundAlpha": 0,
+                            "selectedBackgroundAlpha": 0.1,
+                            "selectedBackgroundColor": "#888888",
+                            "graphFillAlpha": 0,
+                            "graphLineAlpha": 0.5,
+                            "selectedGraphFillAlpha": 0,
+                            "selectedGraphLineAlpha": 1,
+                            "autoGridCount": true,
+                            "color": "#AAAAAA"
+                        },
+                        "chartCursor": {
+                            "categoryBalloonDateFormat": "JJ:NN:SS, DD MMMM",
+                            "cursorPosition": "mouse"
+                        },
+                        "categoryField": "date",
+                        "categoryAxis": {
+                            "minPeriod": "fff",
+                            "parseDates": true,
+                            "axisColor": "#DADADA",
+                            "minorGridEnabled": true
+                        },
+                        "export": {
+                            "enabled": true,
+                            "position": "bottom-right"
+                        }
+                    });
+
+                    chart.addListener("dataUpdated", zoomChart);
+                    // when we apply theme, the dataUpdated event is fired even before we add listener, so
+                    // we need to call zoomChart here
+                    zoomChart();
+                    // this method is called when chart is first inited as we listen for "dataUpdated" event
+                    function zoomChart() {
+                        // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+                        chart.zoomToIndexes(chartData.length - 250, chartData.length - 100);
+                    }
+
+                    // generate some random data, quite different range
+                    function generateChartData() {
+                        var day = <%- unixDay %>;
+                        console.log(day);
+                        var chartData = [];
+                        // current date
+                        var firstDate = new Date();
+                        // now set 500 minutes back
+                        firstDate.setMinutes(firstDate.getDate() - 1000);
+
+                        // and generate 500 data items
+                        for (var i = 0; i < 10000; i++) {
+                            var newDate = new Date(firstDate);
+                            // each time we add one minute
+                            newDate.setSeconds(newDate.getSeconds() + i);
+                            // some random number
+                            var voltage = Math.round(Math.random() * 40 + 10 + i + Math.random() * i / 5);
+                            var step = i;
+                            // add data item to the array
+                            chartData.push({
+                                date: newDate,
+                                voltages: voltage,
+                                steps: step
+                            });
+                        }
+                        return chartData;
+                    }
+                </script>
+                <div id="chartdiv"></div>
+            </div>
+        </div>
+    </div>
+
+    
+   
+</body>
+</html>

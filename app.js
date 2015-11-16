@@ -16,6 +16,7 @@ var form = require('./routes/form');
 var tabpanel = require('./routes/tabpanel');
 var table = require('./routes/table');
 var ui = require('./routes/ui');
+var day = require('./routes/day');
 
 
 var app = express();
@@ -43,6 +44,7 @@ app.use('/form', form)
 app.use('/tabpanel', tabpanel)
 app.use('/table', table)
 app.use('/ui', ui)
+app.use('/day', day)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

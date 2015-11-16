@@ -1,63 +1,176 @@
 <nav class="navbar-default navbar-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav" id="main-menu">
-		<li class="text-center">
-            <img src="img/find_user.png" class="user-image img-responsive"/>
-			</li>
-		
-			
+    <div id="main-menu-sidebar" class="sidebar-collapse">
+        <!-- <ul class="nav" id="main-menu">
+            <li class="text-center">
+                <img src="<%= typeof relativePath!='undefined' ? relativePath : '' %>img/find_user.png" class="user-image img-responsive"/>
+            </li>
+                   
             <li>
                 <a class="active-menu"  href="/"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
             </li>
              <li>
-                <a  href="ui"><i class="fa fa-desktop fa-3x"></i> UI Elements</a>
+                <a  href="<%= typeof relativePath!='undefined' ? relativePath : '' %>ui"><i class="fa fa-desktop fa-3x"></i> UI Elements</a>
             </li>
             <li>
-                <a  href="tabpanel"><i class="fa fa-qrcode fa-3x"></i> Tabs & Panels</a>
+                <a  href="<%= typeof relativePath!='undefined' ? relativePath : '' %>tabpanel"><i class="fa fa-qrcode fa-3x"></i> Tabs & Panels</a>
             </li>
-				   <li  >
-                <a   href="chart"><i class="fa fa-bar-chart-o fa-3x"></i> Morris Charts</a>
-            </li>	
+                   <li  >
+                <a   href="<%= typeof relativePath!='undefined' ? relativePath : '' %>day/1"><i class="fa fa-bar-chart-o fa-3x"></i> Morris Charts</a>
+            </li>   
               <li  >
-                <a  href="table"><i class="fa fa-table fa-3x"></i> Table Examples</a>
+                <a  href="<%= typeof relativePath!='undefined' ? relativePath : '' %>table"><i class="fa fa-table fa-3x"></i> Table Examples</a>
             </li>
             <li  >
-                <a  href="form"><i class="fa fa-edit fa-3x"></i> Forms </a>
-            </li>				
-			
-			                   
+                <a  href="<%= typeof relativePath!='undefined' ? relativePath : '' %>form"><i class="fa fa-edit fa-3x"></i> Forms </a>
+            </li>               
+            
             <li>
-                <a href="#"><i class="fa fa-sitemap fa-3x"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="#">Second Level Link</a>
-                    </li>
-                    <li>
-                        <a href="#">Second Level Link</a>
-                    </li>
-                    <li>
-                        <a href="#">Second Level Link<span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level">
-                            <li>
-                                <a href="#">Third Level Link</a>
-                            </li>
-                            <li>
-                                <a href="#">Third Level Link</a>
-                            </li>
-                            <li>
-                                <a href="#">Third Level Link</a>
-                            </li>
-
-                        </ul>
-                       
-                    </li>
-                </ul>
-              </li>  
-          <li  >
-                <a  href="blank"><i class="fa fa-square-o fa-3x"></i> Blank Page</a>
-            </li>	
-        </ul>
-       
+                <a  href="<%= typeof relativePath!='undefined' ? relativePath : '' %>blank"><i class="fa fa-square-o fa-3x"></i> Blank Page</a>
+            </li>   
+        </ul> -->
     </div>
     
 </nav>  
+<script type="text/babel">
+  // To get started with this tutorial running your own code, simply remove
+  // the script tag loading scripts/example.js and start writing code here.
+// tutorial1.js
+var NavBar = React.createClass({
+  render: function() {
+    return (
+      <ul className="nav" id="main-menu">
+        <Picture/>
+        <DashBoard/>
+        <Data/>
+      </ul>
+    );
+  }
+});
+
+var Picture = React.createClass({
+    render: function() {
+        return (
+            <li className="text-center">
+                <img src="<%= typeof relativePath!='undefined' ? relativePath : '' %>img/find_user.png" className="user-image img-responsive"/>
+            </li>
+        );
+    }
+});
+
+var whileLoopAlt = function(array1, array2) {
+    var array3 = [];
+    var arr = array1.concat(array2);
+    var len = arr.length;
+    var assoc = {};
+
+    while(len--) {
+        var itm = arr[len];
+
+        if(!assoc[itm]) { // Eliminate the indexOf call
+            array3.unshift(itm);
+            assoc[itm] = true;
+        }
+    }
+
+    return array3;
+};
+
+var Data = React.createClass({
+    getInitialState: function() {
+        return {
+            timestamps: []
+        };
+    },
+    componentWillMount: function() {
+        this.androidRef = new Firebase("https://senior-design.firebaseio.com/android");
+        this.androidRef.once("value", function(dataSnapshot) {
+            var androidTempTimestamps = [];
+
+            dataSnapshot.forEach(function (androidChildSnapshot) {
+                // console.log(androidChildSnapshot.key());
+                androidTempTimestamps.push(androidChildSnapshot.key());
+            });
+            // console.log(androidTempTimestamps);
+            var deduplicatedTimestamps = whileLoopAlt(this.state.timestamps, androidTempTimestamps);
+            this.setState({
+                timestamps: deduplicatedTimestamps
+            });
+        }.bind(this));
+        this.microcontrollerRef = new Firebase("https://senior-design.firebaseio.com/microcontroller");
+        this.microcontrollerRef.once("value", function(dataSnapshot) {
+            var microcontrollerTempTimestamps = [];
+            dataSnapshot.forEach(function(microcontrollerChildSnapshot) {
+                // console.log(microcontrollerChildSnapshot.key());
+
+                microcontrollerTempTimestamps.push(microcontrollerChildSnapshot.key());
+            });
+            // console.log(microcontrollerTempTimestamps);
+            var deduplicatedTimestamps = whileLoopAlt(this.state.timestamps, microcontrollerTempTimestamps);
+            this.setState({
+                timestamps: deduplicatedTimestamps
+            });
+        }.bind(this));
+    },
+    componentWillUnmount: function() {
+        this.microcontrollerRef.off();
+        this.androidRef.off();
+    },
+    render: function() {
+
+        var rows = [];
+        for (var i = 0; i < this.state.timestamps.length; i++) {
+            rows.push(<IndividualDayOfData key={i} unixTimestamp={this.state.timestamps[i]}/>)
+        }
+        return (
+            <li>
+                <a  href="#"><i className="fa fa-table fa-3x"></i> Data<span className="fa arrow"></span></a>
+                <ul className="nav nav-second-level">
+                    {rows}
+                </ul>
+
+            </li>
+        );
+    }
+});
+
+function unixToDate(unix_timestamp) {
+    var a = new Date(unix_timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    return month + " " + date + ", " + year;
+}
+
+var IndividualDayOfData = React.createClass({
+    render: function() {
+        // console.log("Starting individual data");
+        var hrefString = "<%= typeof relativePath!='undefined' ? relativePath : '' %>day/" + this.props.unixTimestamp;
+        var realDate = unixToDate(this.props.unixTimestamp);
+        var activateMenu = "";
+        if (<%- typeof unixDay!='undefined' ? unixDay : -1 %> == this.props.unixTimestamp) {
+            activateMenu = "active-menu";
+        }
+        return (
+            <li>
+                <a className={activateMenu} href={hrefString}>{realDate}</a> 
+            </li>
+        );
+    }
+});
+
+var DashBoard = React.createClass({
+    render: function() {
+        return (
+            <li>
+                <a className="<%- typeof activePage!='undefined' ? 'active-menu' : '' %>"  href="/"><i className="fa fa-dashboard fa-3x"></i> Dashboard</a>
+            </li>
+        );
+    }
+});
+
+ReactDOM.render(
+  <NavBar />,
+  document.getElementById('main-menu-sidebar')
+);
+</script>
