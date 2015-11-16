@@ -7,6 +7,14 @@ var microcontrollerRef = ref.child("microcontroller");
 var androidRef = ref.child("android");
 var Q = require('q');
 
+// var tempRef = microcontrollerRef.child("1447653600")
+
+// for (var i = 1; i < 8; i++) {
+// 	var temptempRef = tempRef.child(i);
+// 	temptempRef.remove();
+// 	console.log("Removed");
+// }
+
 /* GET home page. */
 router.get('/:unixDay', function(req, res, next) {
 	
@@ -68,14 +76,155 @@ router.get('/:unixDay', function(req, res, next) {
 				var unixMilliseconds = hourDate.getTime() + numMilliseconds;
 
 				// console.log(parseInt(unixMilliseconds));
-				var steps = microcontrollerMillisecondObject[milliseconds];
-				cleanMicrocontrollerData[unixMilliseconds] = steps;
+				var power = microcontrollerMillisecondObject[milliseconds];
+				cleanMicrocontrollerData[unixMilliseconds] = power;
 			}
 		}
+
+		var androidKeys = Object.keys(cleanAndroidData);
+		var microcontrollerKeys = Object.keys(cleanMicrocontrollerData);	
+
+		androidKeys.sort();
+		microcontrollerKeys.sort();
+
+		var androidIndex = 0;
+		var microcontrollerIndex = 0;
+		var androidLength = androidKeys.length;
+		var microcontrollerLength = microcontrollerKeys.length;
+		var lastStep = 0;
+		var lastPower = 0;
+		var resultingData = [];
+		var instantaneousData = [];
+		// console.log("About to reorder data");
+		while (androidIndex < androidLength || microcontrollerIndex < microcontrollerLength) {
+			// console.log("While loop");
+			// console.log(androidIndex, androidLength, microcontrollerLength, microcontrollerIndex);
+			if (androidIndex >= androidLength) {
+				var powerArray = (cleanMicrocontrollerData[microcontrollerKeys[microcontrollerIndex]]).split('-');
+				resultingData.push({
+                    date: new Date(parseInt(microcontrollerKeys[microcontrollerIndex])),
+                    power: parseInt(powerArray[1]),
+                    steps: lastStep
+				});
+				instantaneousData.push({
+                    date: new Date(parseInt(microcontrollerKeys[microcontrollerIndex])),
+                    power: parseInt(powerArray[0]),
+                    steps: lastStep
+				});
+				microcontrollerIndex += 1;
+				lastPower = parseInt(powerArray[1]);
+				continue;
+			}
+			if (microcontrollerIndex >= microcontrollerLength) {
+				resultingData.push({
+                    date: new Date(parseInt(androidKeys[androidIndex])),
+                    power: lastPower,
+                    steps: cleanAndroidData[androidKeys[androidIndex]]
+				});
+				instantaneousData.push({
+                    date: new Date(parseInt(androidKeys[androidIndex])),
+                    power: 0,
+                    steps: cleanAndroidData[androidKeys[androidIndex]]
+				});
+				androidIndex += 1;
+				lastStep = currentStep;
+				continue;
+			}
+			var androidTimestamp = parseInt(androidKeys[androidIndex]);
+			var currentStep = cleanAndroidData[androidKeys[androidIndex]];
+			var microcontrollerTimestamp = parseInt(microcontrollerKeys[microcontrollerIndex]);
+			var currentPowerArray = (cleanMicrocontrollerData[microcontrollerKeys[microcontrollerIndex]]).split('-');
+			var currentEnergy = parseInt(currentPowerArray[1]);
+			var currentInstantPower = parseInt(currentPowerArray[0]);
+			if (androidTimestamp < microcontrollerTimestamp) {
+				// lower android
+				if (androidTimestamp < microcontrollerTimestamp - 100) {
+					resultingData.push({
+                        date: new Date(androidTimestamp),
+                        power: lastPower,
+                        steps: currentStep
+					});
+					instantaneousData.push({
+                        date: new Date(androidTimestamp),
+                        power: 0,
+                        steps: currentStep
+					});
+					androidIndex += 1;
+					lastStep = currentStep;
+				} else {
+					resultingData.push({
+						date: new Date(androidTimestamp),
+						power: currentEnergy,
+						steps: currentStep
+					});
+					instantaneousData.push({
+						date: new Date(androidTimestamp),
+						power: currentInstantPower,
+						steps: currentStep
+					});
+					androidIndex += 1;
+					microcontrollerIndex += 1;
+					lastStep = currentStep;
+					lastPower = currentEnergy;
+				}
+
+			} else if (androidTimestamp == microcontrollerTimestamp) {
+				// equal
+				resultingData.push({
+					date: new Date(androidTimestamp),
+					power: currentEnergy,
+					steps: currentStep
+				});
+				instantaneousData.push({
+					date: new Date(androidTimestamp),
+					power: currentInstantPower,
+					steps: currentStep
+				});
+				androidIndex += 1;
+				microcontrollerIndex += 1;
+				lastStep = currentStep;
+				lastPower = currentEnergy;
+			} else {
+				if (microcontrollerTimestamp < androidTimestamp - 100) {
+					resultingData.push({
+                        date: new Date(microcontrollerTimestamp),
+                        power: currentEnergy,
+                        steps: lastStep
+					});
+					instantaneousData.push({
+						date: new Date(androidTimestamp),
+						power: currentInstantPower,
+						steps: currentStep
+					});
+					microcontrollerIndex += 1;
+					lastPower = currentEnergy;
+				} else {
+					
+					// equal
+					resultingData.push({
+						date: new Date(androidTimestamp),
+						power: currentEnergy,
+						steps: currentStep
+					});
+					instantaneousData.push({
+						date: new Date(androidTimestamp),
+						power: currentInstantPower,
+						steps: currentStep
+					});
+					androidIndex += 1;
+					microcontrollerIndex += 1;
+					lastStep = currentStep;
+					lastPower = currentEnergy;
+				}
+				// lower microcontroller
+			}
+		}
+
 		// console.log(cleanAndroidData);
 		// console.log(cleanMicrocontrollerData);
+		// console.log(resultingData);
 	  	res.render("day", {unixDay : unixDate, relativePath : '../', 
-	  		androidData: cleanAndroidData, microcontrollerData: cleanMicrocontrollerData });
+	  		completeChartData: resultingData, completeInstantData: instantaneousData });
 	});
 });
 

@@ -57,7 +57,7 @@ router.post('/', function(req, res, next) {
     var diff = (maxTimestamp - parseInt(key)).toString();
 
     // console.log("Entering for loop" + allKeys.toString());
-    var voltageValue = parseFloat(voltageData[key]);
+    var voltageValue = voltageData[key];
     // console.log(key + voltageValue);
     // var originalMoment = moment(currentSeconds);
     // console.log("Original Unix: " + rightNow.getTime());
