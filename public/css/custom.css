@@ -383,3 +383,10 @@ line-height: 1.428571429;
   background: #262322;
   border-radius: 5px;
 }
+
+.info {
+  display: inline-block;
+  margin: 0 25px 0 5px;
+  background: #eee;
+  padding: 3px 9px;
+}

@@ -33,6 +33,22 @@
 
                     });
                </script>
+                <div id="chartdiv"></div>
+                <div class="tools text-center">
+                    <div class="row">
+                      <label>INDICES:</label><div id="indices" class="info">...</div>
+                    </div>
+                    <div class="row">
+                      <label>TIME RANGE:</label><div id="selection" class="info">...</div>
+                    </div>
+                    <div class="row">
+                      <label>VOLTAGES:</label><div id="voltages" class="info">...</div>
+                    </div>
+                    <div class="row">
+                      <label>STEPS:</label><div id="steps" class="info">...</div>
+                    </div>
+
+                </div>
                 <script>
                     var chartData = generateChartData();
 
@@ -51,7 +67,8 @@
                             "axisThickness": 2,
                             "gridAlpha": 0,
                             "axisAlpha": 1,
-                            "axisColor": "#FFA400"
+                            "axisColor": "#FFA400",
+                            "position": "left"
                         }, {
                             "id":"v2",
                             "position": "right",
@@ -60,9 +77,10 @@
                             "gridAlpha": 0,
                             "axisAlpha": 1,
                             "axisColor": "#87BCDE",
+                            "position": "right"
                         }],
                         "graphs": [{
-                            "id": "v1",
+                            "valueAxis": "v1",
                             "lineColor": "#FFA400",
                             "fillAlphas": 0.4,
                             "title": "Voltage (V)",
@@ -103,23 +121,39 @@
                         "export": {
                             "enabled": true,
                             "position": "bottom-right"
-                        }
-                    });
+                        },
+                        "listeners": [{
+                            "event": "zoomed",
+                            "method": function(e) {
+                                var voltageStart = chart.graphs[0].data[e.startIndex].dataContext.voltages;
+                                var stepStart = chart.graphs[0].data[e.startIndex].dataContext.steps;
+                                var voltageEnd = chart.graphs[0].data[e.endIndex].dataContext.voltages;
+                                var stepEnd = chart.graphs[0].data[e.endIndex].dataContext.steps;
 
-                    chart.addListener("dataUpdated", zoomChart);
-                    // when we apply theme, the dataUpdated event is fired even before we add listener, so
-                    // we need to call zoomChart here
-                    zoomChart();
-                    // this method is called when chart is first inited as we listen for "dataUpdated" event
-                    function zoomChart() {
-                        // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
-                        chart.zoomToIndexes(chartData.length - 250, chartData.length - 100);
-                    }
+                              var indicesText = e.startIndex;
+                              indicesText += " -- " + e.endIndex;                                
+                              var text = e.startValue;
+                              text += " -- " + e.endValue;
+
+                              var voltageText = voltageStart + " V ";
+                              voltageText += " -- " + voltageEnd + " V ";
+
+                              var stepText = stepStart + " steps ";
+                              stepText += " -- " + stepEnd + " steps ";
+
+                              document.getElementById("indices").innerHTML = indicesText;
+                              document.getElementById("selection").innerHTML = text;
+                              document.getElementById("voltages").innerHTML = voltageText;
+                              document.getElementById("steps").innerHTML = stepText;
+                            }
+                          }]
+                    });
 
                     // generate some random data, quite different range
                     function generateChartData() {
                         var day = <%- unixDay %>;
                         console.log(day);
+                        
                         var chartData = [];
                         // current date
                         var firstDate = new Date();
@@ -132,7 +166,7 @@
                             // each time we add one minute
                             newDate.setSeconds(newDate.getSeconds() + i);
                             // some random number
-                            var voltage = Math.round(Math.random() * 40 + 10 + i + Math.random() * i / 5);
+                            var voltage = Math.round(Math.random() * 40 + 10 + i + Math.random() * i / 5)/5000;
                             var step = i;
                             // add data item to the array
                             chartData.push({
@@ -144,7 +178,7 @@
                         return chartData;
                     }
                 </script>
-                <div id="chartdiv"></div>
+
             </div>
         </div>
     </div>
