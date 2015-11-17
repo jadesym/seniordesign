@@ -51,7 +51,7 @@
                       <label>POWER GENERATED PER STEP:</label><div id="powerPerStep" class="info">...</div>
                     </div>
                 </div>
-                <script>
+                <script type="text/javascript">
 
                     var chartData = <%- JSON.stringify(completeChartData) %>;
                     // console.log(chartData);
@@ -182,7 +182,7 @@
                     //     return chartData;
                     // }
                 </script>
-                <div id="instantchartdiv"></div>
+                <div id="instant-chart-div"></div>
                 <div class="tools text-center">
                     <div class="row">
                       <label>INDICES:</label><div id="instantindices" class="info">...</div>
@@ -197,11 +197,11 @@
                       <label>STEPS:</label><div id="instantsteps" class="info">...</div>
                     </div>
                 </div>
-                <script>
+                <script type="text/javascript">
 
                     var instantchartData = <%- JSON.stringify(completeInstantData) %>;
-                    // console.log(chartData);
-                    var instantchart = AmCharts.makeChart("instantchartdiv", {
+                    console.log(instantchartData);
+                    var instantchart = AmCharts.makeChart("instant-chart-div", {
                         "type": "serial",
                         "theme": "dark",
                         "legend": {
@@ -210,7 +210,7 @@
                         "marginRight": 80,
                         "dataProvider": instantchartData,
                         "valueAxes": [{
-                            "id":"v1",
+                            "id":"v3",
                             "position": "left",
                             "title": "Instantaneous Power (W)",
                             "axisThickness": 2,
@@ -219,7 +219,7 @@
                             "axisColor": "#FFA400",
                             "position": "left"
                         }, {
-                            "id":"v2",
+                            "id":"v4",
                             "position": "right",
                             "title": "Steps",
                             "axisThickness": 2,
@@ -229,14 +229,14 @@
                             "position": "right"
                         }],
                         "graphs": [{
-                            "valueAxis": "v1",
+                            "valueAxis": "v3",
                             "lineColor": "#FFA400",
                             "fillAlphas": 0.4,
                             "title": "Instantaneous Power (W)",
                             "valueField": "power",
                             "balloonText": "<div style='margin:5px; font-size:19px;'>Instantaneous Power: <b>[[value]] W</b></div>"
                         }, {
-                            "valueAxis": "v2",
+                            "valueAxis": "v4",
                             "lineColor": "#87BCDE",
                             "fillAlphas": 0.4,
                             "title": "Steps",
@@ -244,7 +244,7 @@
                             "balloonText": "<div style='margin:5px; font-size:19px;'>Steps: <b>[[value]]</b></div>"
                         }],
                         "chartScrollbar": {
-                            "graph": "v1",
+                            "graph": "v3",
                             "scrollbarHeight": 80,
                             "backgroundAlpha": 0,
                             "selectedBackgroundAlpha": 0.1,
@@ -274,10 +274,10 @@
                         "listeners": [{
                             "event": "zoomed",
                             "method": function(e) {
-                                var powerStart = chart.graphs[0].data[e.startIndex].dataContext.power;
-                                var stepStart = chart.graphs[0].data[e.startIndex].dataContext.steps;
-                                var powerEnd = chart.graphs[0].data[e.endIndex].dataContext.power;
-                                var stepEnd = chart.graphs[0].data[e.endIndex].dataContext.steps;
+                                var powerStart = instantchart.graphs[0].data[e.startIndex].dataContext.power;
+                                var stepStart = instantchart.graphs[0].data[e.startIndex].dataContext.steps;
+                                var powerEnd = instantchart.graphs[0].data[e.endIndex].dataContext.power;
+                                var stepEnd = instantchart.graphs[0].data[e.endIndex].dataContext.steps;
 
                               var indicesText = e.startIndex;
                               indicesText += " -- " + e.endIndex;                                
@@ -295,7 +295,7 @@
                               document.getElementById("instantpower").innerHTML = powerText;
                               document.getElementById("instantsteps").innerHTML = stepText;
                             }
-                          }]
+                        }]
                     });
 
                     // // generate some random data, quite different range
@@ -329,7 +329,6 @@
                 </script>
 
 
-            </div>
         </div>
     </div>
 
