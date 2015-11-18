@@ -103,16 +103,16 @@ router.get('/:unixDay', function(req, res, next) {
 				var powerArray = (cleanMicrocontrollerData[microcontrollerKeys[microcontrollerIndex]]).split('-');
 				resultingData.push({
                     date: new Date(parseInt(microcontrollerKeys[microcontrollerIndex])),
-                    power: parseInt(powerArray[1]),
+                    power: parseFloat(powerArray[1]) / 1000000,
                     steps: lastStep
 				});
 				instantaneousData.push({
                     date: new Date(parseInt(microcontrollerKeys[microcontrollerIndex])),
-                    power: parseInt(powerArray[0]),
+                    power: parseFloat(powerArray[0]),
                     steps: lastStep
 				});
 				microcontrollerIndex += 1;
-				lastPower = parseInt(powerArray[1]);
+				lastPower = parseFloat(powerArray[1]);
 				continue;
 			}
 			if (microcontrollerIndex >= microcontrollerLength) {
@@ -134,8 +134,8 @@ router.get('/:unixDay', function(req, res, next) {
 			var currentStep = cleanAndroidData[androidKeys[androidIndex]];
 			var microcontrollerTimestamp = parseInt(microcontrollerKeys[microcontrollerIndex]);
 			var currentPowerArray = (cleanMicrocontrollerData[microcontrollerKeys[microcontrollerIndex]]).split('-');
-			var currentEnergy = parseInt(currentPowerArray[1]);
-			var currentInstantPower = parseInt(currentPowerArray[0]);
+			var currentEnergy = parseFloat(currentPowerArray[1]) / 1000000;
+			var currentInstantPower = parseFloat(currentPowerArray[0]);
 			if (androidTimestamp < microcontrollerTimestamp) {
 				// lower android
 				if (androidTimestamp < microcontrollerTimestamp - 100) {
@@ -222,7 +222,7 @@ router.get('/:unixDay', function(req, res, next) {
 
 		// console.log(cleanAndroidData);
 		// console.log(cleanMicrocontrollerData);
-		// console.log(resultingData);
+		console.log(resultingData);
 	  	res.render("day", {unixDay : unixDate, relativePath : '../', 
 	  		completeChartData: resultingData, completeInstantData: instantaneousData });
 	});
