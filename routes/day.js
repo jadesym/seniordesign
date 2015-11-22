@@ -222,7 +222,7 @@ router.get('/:unixDay', function(req, res, next) {
 
 		// console.log(cleanAndroidData);
 		// console.log(cleanMicrocontrollerData);
-		console.log(resultingData);
+		// console.log(resultingData);
 	  	res.render("day", {unixDay : unixDate, relativePath : '../', 
 	  		completeChartData: resultingData, completeInstantData: instantaneousData });
 	});
