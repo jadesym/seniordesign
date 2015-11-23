@@ -48,7 +48,7 @@ body {
     border:1px solid #f3f3f3;
 }
 h2 {
-    color: #FFA64E;
+    color: #004C99;
     font-weight: bold;
 }
 h4 {
@@ -421,4 +421,9 @@ line-height: 1.428571429;
 ul
 {
     list-style-type: none;
+    font-size:20px;
+}
+
+span {
+  font-size:30px;
 }

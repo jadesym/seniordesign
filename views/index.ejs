@@ -9,46 +9,33 @@
         <div id="page-wrapper" >
             <div id="page-inner">
                 <div class="row">
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-6 text-center">
                          <h2>Portable Energy Generator: Data Visualization Tool</h2>   
-                        <h3>Welcome to PEG's Data Visualization Tool. Below is a flowchart representation of how the Data Collection System functions. Below we outline a lower-level description of the interaction between the components of the DCS. </h3>
-                                   </div>
-                </div>
-              <hr />   
-                <div class="row">
-                    <div class="col-md-2">
+                        <h3>Welcome to PEG's Data Visualization Tool. This tool was created to help aid the design process for researching, building, and testing a portable energy device. Below is a flowchart representation of how the Data Collection System functions. </h3>
+                        <hr/>
+                        <img src="/img/flowchart.jpg" height="75%" width= "75%"/>                      
                     </div>
-                    <div class="col-md-8 text-center">
-                        <img src="/img/flowchart.jpg" height="50%" width= "50%"/>                         
-                    </div>
-                </div>
-               <hr />   
-
-                <div class="row">
-                    <div class="col-md-12 text-center">
-
-                     <h2>Portable Energy Generator: Data Collection System</h2>   
+                    <div class="col-md-6 text-center">
+                             <h2>Graphical Representations</h2>   
+                        <h3>Graphical representations of the energy production by PEG can be found under the Data section, sorted by date. The graphs show the trend of the power generation in real time, as well as records the power, number of steps, and power generated per step. </h3>
+                        <hr/>
+                             <h2>Portable Energy Generator: Data Collection System</h2>   
 
                         <h3>The Data Collection System allows us to measure the performance of PEG by taking the output from the Energy Harvesting System and sending readings by the TM4C microcontroller every 100ms, which then extrapolates the original voltage. Using this voltage data and the total load resistance, it calculates the instantaneous power generation, which it then integrates using the trapezoid rule to find the total energy generated. The data measurements and calculations are then sent to a Node.js server to be transformed into visualizations. The Data Collection System is wireless and returns real-time feedback about the energy produced. </h3>
-                    </div>
-                </div>
-                  <hr />
-                <div class="row">
-                   <div class="col-md-1">                     
-                    </div>
-                   <div class="col-md-10 text-center">     
-                    <img src="/img/energy_flow.jpg"/>                
-                    </div>
-                </div>
+                        <hr/>
+                        <img src="/img/energy_flow.jpg"/>                
 
-                  <hr />   
-              <div class="row">
-                    <div class="col-md-12 text-center">
-                     <h2>Graphical Representations</h2>   
-                        <h3>Graphical representations of the energy production by PEG can be found under the Data section, sorted by date. The graphs show the trend of the power generation in real time, as well as records the power, number of steps, and power generated per step. </h3>
                     </div>
-                </div>      
-              <hr />   
+                    </div>
+                    <hr />   
+<!--                 <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-10">
+
+                    </div>
+                </div> -->
+                <!-- <hr/> -->
               <div class="row">
                     <div class="col-md-1">
                     </div>

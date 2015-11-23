@@ -11,7 +11,8 @@
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <h2> <span id="data-date"></span> | Power & Step Data</h2>   
-                        <br>
+                        <hr/>
+                        <h3> Total Energy Generated <h3/>
                     </div>
                 </div>  
                 <script type="text/javascript">
@@ -34,6 +35,7 @@
                     });
                </script>
                 <div id="chartdiv"></div>
+                <br>
                 <div class="tools text-center">
                     <div class="row">
                       <label>INDICES:</label><div id="indices" class="info">...</div>
@@ -50,7 +52,9 @@
                     <div class="row">
                       <label>POWER GENERATED PER STEP:</label><div id="powerPerStep" class="info">...</div>
                     </div>
+
                 </div>
+                <hr/>
                 <script type="text/javascript">
 
                     var chartData = <%- JSON.stringify(completeChartData) %>;
@@ -182,7 +186,13 @@
                     //     return chartData;
                     // }
                 </script>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3> Voltage & Instantaneous Power <h3/>
+                    </div>
+                </div>  
                 <div id="instant-chart-div"></div>
+                <br>
                 <div class="tools text-center">
                     <div class="row">
                       <label>INDICES:</label><div id="instantindices" class="info">...</div>
@@ -192,6 +202,9 @@
                     </div>
                     <div class="row">
                       <label>VOLTAGE:</label><div id="instantvoltage" class="info">...</div>
+                    </div>
+                    <div class="row">
+                      <label>INSTANTANEOUS POWER:</label><div id="instantpower" class="info">...</div>
                     </div>
                     <div class="row">
                       <label>STEPS:</label><div id="instantsteps" class="info">...</div>
@@ -234,7 +247,7 @@
                             "fillAlphas": 0.4,
                             "title": "Voltage (V)",
                             "valueField": "power",
-                            "balloonText": "<div style='margin:5px; font-size:19px;'>Voltage: <b>[[value]] V</b> <br> Instantaneous Power: <b> [[Math.pow(value,2) / 2500000]] W </b> </div>"
+                            "balloonText": "<div style='margin:5px; font-size:19px;'>Voltage: <b>[[value]] V</b> </div>"
                         }, {
                             "valueAxis": "v4",
                             "lineColor": "#87BCDE",
@@ -287,17 +300,20 @@
                               var powerText = powerStart + " V ";
                               powerText += " -- " + powerEnd + " V ";
 
+                              var instantPowerText = Math.pow(powerStart, 2) + "W";
+                              instantPowerText += " -- " + Math.pow(powerEnd, 2) + "W";
+
                               var stepText = stepStart + " steps ";
                               stepText += " -- " + stepEnd + " steps ";
 
                               document.getElementById("instantindices").innerHTML = indicesText;
                               document.getElementById("instantselection").innerHTML = text;
                               document.getElementById("instantvoltage").innerHTML = powerText;
+                                document.getElementById("instantpower").innerHTML = instantPowerText;
                               document.getElementById("instantsteps").innerHTML = stepText;
                             }
                         }]
                     });
-
                     // // generate some random data, quite different range
                     // function generateChartData() {
                     //     var day = <%- unixDay %>;
