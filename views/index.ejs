@@ -10,7 +10,25 @@
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12 text-center">
+                         <h2>Portable Energy Generator: Data Visualization Tool</h2>   
+                        <h3>Welcome to PEG's Data Visualization Tool. Below is a flowchart representation of how the Data Collection System functions. Below we outline a lower-level description of the interaction between the components of the DCS. </h3>
+                                   </div>
+                </div>
+              <hr />   
+                <div class="row">
+                    <div class="col-md-3">
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <img src="/img/flowchart.jpg" height="50%" width= "50%"/>                         
+                    </div>
+                </div>
+               <hr />   
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+
                      <h2>Portable Energy Generator: Data Collection System</h2>   
+
                         <h3>The Data Collection System allows us to measure the performance of PEG by taking the output from the Energy Harvesting System and sending readings by the TM4C microcontroller every 100ms, which then extrapolates the original voltage. Using this voltage data and the total load resistance, it calculates the instantaneous power generation, which it then integrates using the trapezoid rule to find the total energy generated. The data measurements and calculations are then sent to a Node.js server to be transformed into visualizations. The Data Collection System is wireless and returns real-time feedback about the energy produced. </h3>
                     </div>
                 </div>
@@ -30,6 +48,37 @@
                         <h3>Graphical representations of the energy production by PEG can be found under the Data section, sorted by date. The graphs show the trend of the power generation in real time, as well as records the power, number of steps, and power generated per step. </h3>
                     </div>
                 </div>      
+              <hr />   
+              <div class="row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-10">
+                        <h2>
+                            This tool was created using the following technologies:
+                        </h2>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-4">
+                            <h4>
+                                <ul>
+                                    <li><a href="https://nodejs.org/en/">Node.js</a></li>
+                                    <li><a href="http://expressjs.com/">Express</a></li>
+                                    <li><a href="http://www.amcharts.com/">AmCharts</a></li>
+
+                                </ul>
+                            </h4>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>
+                                <ul>
+                                    <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+                                    <li><a href="https://jquery.com/">jQuery</a></li>
+                                    <li><a href="https://facebook.github.io/react/">React.js</a></li>
+                                </ul>
+                            </h4>
+                        </div>
+                     </div>
+            </div>     
    <!-- 
                 <div class="row">
                 <div class="col-md-3 col-sm-6 col-xs-6">           
