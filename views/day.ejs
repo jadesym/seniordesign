@@ -42,7 +42,7 @@
                       <label>TIME RANGE:</label><div id="selection" class="info">...</div>
                     </div>
                     <div class="row">
-                      <label>POWER:</label><div id="power" class="info">...</div>
+                      <label>ENERGY GENERATED:</label><div id="power" class="info">...</div>
                     </div>
                     <div class="row">
                       <label>STEPS:</label><div id="steps" class="info">...</div>
@@ -138,8 +138,8 @@
                               var text = e.startValue;
                               text += " -- " + e.endValue;
 
-                              var powerText = powerStart + " W ";
-                              powerText += " -- " + powerEnd + " W ";
+                              var powerText = powerStart + " J ";
+                              powerText += " -- " + powerEnd + " J ";
 
                               var stepText = stepStart + " steps ";
                               stepText += " -- " + stepEnd + " steps ";
@@ -191,7 +191,7 @@
                       <label>TIME RANGE:</label><div id="instantselection" class="info">...</div>
                     </div>
                     <div class="row">
-                      <label>POWER:</label><div id="instantpower" class="info">...</div>
+                      <label>VOLTAGE:</label><div id="instantvoltage" class="info">...</div>
                     </div>
                     <div class="row">
                       <label>STEPS:</label><div id="instantsteps" class="info">...</div>
@@ -234,7 +234,7 @@
                             "fillAlphas": 0.4,
                             "title": "Voltage (V)",
                             "valueField": "power",
-                            "balloonText": "<div style='margin:5px; font-size:19px;'>Voltage: <b>[[value]] V</b></div>"
+                            "balloonText": "<div style='margin:5px; font-size:19px;'>Voltage: <b>[[value]] V</b> <br> Instantaneous Power: <b> [[Math.pow(value,2) / 2500000]] W </b> </div>"
                         }, {
                             "valueAxis": "v4",
                             "lineColor": "#87BCDE",
@@ -284,15 +284,15 @@
                               var text = e.startValue;
                               text += " -- " + e.endValue;
 
-                              var powerText = powerStart + " W ";
-                              powerText += " -- " + powerEnd + " W ";
+                              var powerText = powerStart + " V ";
+                              powerText += " -- " + powerEnd + " V ";
 
                               var stepText = stepStart + " steps ";
                               stepText += " -- " + stepEnd + " steps ";
 
                               document.getElementById("instantindices").innerHTML = indicesText;
                               document.getElementById("instantselection").innerHTML = text;
-                              document.getElementById("instantpower").innerHTML = powerText;
+                              document.getElementById("instantvoltage").innerHTML = powerText;
                               document.getElementById("instantsteps").innerHTML = stepText;
                             }
                         }]
