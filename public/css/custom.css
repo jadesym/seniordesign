@@ -12,13 +12,19 @@
 /*==============================================
     GENERAL  STYLES    
     =============================================*/
+@font-face {
+  font-family: Geo;
+  font-style: normal;
+  src: url(../fonts/GeosansLight.ttf);
+}
+
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: Geo, 'Open Sans', sans-serif;
 }
 
  #wrapper {
     width: 100%;
-    background:#202020;
+    background:#004C99;
 }
 
 #page-wrapper {
@@ -207,15 +213,20 @@ max-width:170px;
 
 .navbar-cls-top .navbar-brand {
 	color: #fff;
-background: #C90000;
+background: #000;
 width: 260px;
 text-align: center;
-height: 60px;
+height: 80px;
 font-size: 30px;
 font-weight: 700;
+background-image: url("../img/plantronics_transparent.gif"
+  );
+  background-size: 220px 60px;
+  background-repeat:no-repeat;
+  background-position: center;
 }
 .active-menu {
-    background-color:#C90000!important;
+    background-color:#4EA7FF!important;
 }
 
 .arrow {
@@ -251,7 +262,7 @@ font-weight: 700;
 }
 .sidebar-collapse .nav > li > a {
 	color:#fff;
-	background:#202020;
+	background:#004C99;
 	text-shadow:none;
 	
 }
@@ -276,7 +287,7 @@ font-weight: 700;
 	left:20px;
 	width:15px;
 	height:1px;
-	background:#ff0000;
+	background:#4EA7FF;
 	top:20px;
 }
 .nav-second-level > li > a:after,
@@ -287,7 +298,7 @@ font-weight: 700;
 	left:20px;
 	width:1px;
 	height:100%;
-	background:#ff0000;
+	background:#4EA7FF;
 	top:0px;
 	z-index:10;
 }
@@ -301,7 +312,7 @@ font-weight: 700;
 }
 .navbar-side {
 	border:none;
-	background-color: #202020;
+	background-color: #004C99;
 	
 }
 .navbar-cls-top {
@@ -321,7 +332,8 @@ border:0px solid black;
      
 }
 .navbar-header {
-    background: #A70303;
+/*    background: #A70303;
+*/    
 }
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
 background-color: #B40101;
