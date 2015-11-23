@@ -322,7 +322,12 @@ background-image: url("../img/plantronics_transparent.gif"
 }
 .navbar-cls-top .navbar-brand:hover {
 
-background: #C90000;
+background: #FFA64E;
+background-image: url("../img/plantronics_transparent.gif" ); 
+background-size: 220px 60px; 
+background-repeat:no-repeat; 
+background-position: center;
+
 color:#fff;
 
 }
